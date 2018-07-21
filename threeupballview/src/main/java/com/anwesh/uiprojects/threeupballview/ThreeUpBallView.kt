@@ -9,6 +9,7 @@ import android.view.View
 import android.view.MotionEvent
 import android.graphics.Paint
 import android.graphics.Canvas
+import android.graphics.Color
 
 val NODES : Int = 5
 
@@ -93,6 +94,51 @@ class ThreeUpBallView(ctx : Context) : View(ctx) {
             if (animated) {
                 animated = false
             }
+        }
+    }
+
+    data class TUBNode(var i : Int, val state : State = State()) {
+
+        var prev : TUBNode? = null
+
+        var next : TUBNode? = null
+
+        init {
+            addNeighbor()
+        }
+
+        fun addNeighbor() {
+            if (i < NODES - 1) {
+                next = TUBNode(i + 1)
+                next?.prev = this
+            }
+        }
+
+        fun update(cb : (Int, Float) -> Unit) {
+            state.update {
+                cb(i, it)
+            }
+        }
+
+        fun startUpdating(cb : () -> Unit) {
+            state.startUpdating(cb)
+        }
+
+        fun getNext(dir : Int, cb : () -> Unit) : TUBNode {
+            var curr : TUBNode? = prev
+            if (dir == 1) {
+                curr = next
+            }
+            if (curr != null) {
+                return curr
+            }
+            cb()
+            return this
+        }
+
+        fun draw(canvas : Canvas, paint : Paint) {
+            paint.color = Color.parseColor("#4CAF50")
+            canvas.drawTUBNode(i, state.scale, paint)
         }
     }
 }
