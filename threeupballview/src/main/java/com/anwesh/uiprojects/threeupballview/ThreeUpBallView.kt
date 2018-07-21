@@ -4,6 +4,7 @@ package com.anwesh.uiprojects.threeupballview
  * Created by anweshmishra on 21/07/18.
  */
 
+import android.app.Activity
 import android.content.Context
 import android.view.View
 import android.view.MotionEvent
@@ -188,6 +189,14 @@ class ThreeUpBallView(ctx : Context) : View(ctx) {
             lTub.startUpdating {
                 animator.start()
             }
+        }
+    }
+
+    companion object {
+        fun create(activity : Activity) : ThreeUpBallView {
+            val view : ThreeUpBallView = ThreeUpBallView(activity)
+            activity.setContentView(view)
+            return view 
         }
     }
 }
