@@ -25,7 +25,7 @@ fun Canvas.drawTUBNode(i : Int, scale : Float, paint : Paint) {
         x = gap * 0.4f
     }
     save()
-    translate(gap/2 + i * x * sc2, h/2)
+    translate(gap/2 + i * gap + x * sc2, h/2)
     for (j in 0..2) {
         val yGap : Float = gap * (1 - j) * (1 - sc1)
         drawCircle(0f, yGap, 0.1f * gap, paint)
@@ -142,6 +142,7 @@ class ThreeUpBallView(ctx : Context) : View(ctx) {
         fun draw(canvas : Canvas, paint : Paint) {
             paint.color = Color.parseColor("#4CAF50")
             canvas.drawTUBNode(i, state.scale, paint)
+            next?.draw(canvas, paint)
         }
     }
 
@@ -196,7 +197,7 @@ class ThreeUpBallView(ctx : Context) : View(ctx) {
         fun create(activity : Activity) : ThreeUpBallView {
             val view : ThreeUpBallView = ThreeUpBallView(activity)
             activity.setContentView(view)
-            return view 
+            return view
         }
     }
 }
