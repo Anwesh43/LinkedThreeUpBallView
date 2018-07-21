@@ -144,7 +144,7 @@ class ThreeUpBallView(ctx : Context) : View(ctx) {
 
     data class LinkedTUB(var i : Int) {
 
-        private var curr : TUBNode = TUBNode(i + 1)
+        private var curr : TUBNode = TUBNode(0)
 
         private var dir : Int = 1
 
@@ -163,6 +163,29 @@ class ThreeUpBallView(ctx : Context) : View(ctx) {
 
         fun startUpdating(startcb : () -> Unit) {
             curr.startUpdating(startcb)
+        }
+    }
+
+    data class Renderer(var view : ThreeUpBallView) {
+
+        private val animator : Animator = Animator(view)
+
+        private val lTub : LinkedTUB = LinkedTUB(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(Color.parseColor("#212121"))
+            lTub.draw(canvas, paint)
+            animator.animate {
+                lTub.update {i, scale ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            lTub.startUpdating {
+                animator.start()
+            }
         }
     }
 }
